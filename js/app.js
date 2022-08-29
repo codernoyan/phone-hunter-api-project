@@ -32,12 +32,13 @@ const displayPhones = (phones, dataLimit) => {
         phonesDiv.classList.add('col');
         phonesDiv.innerHTML = `
         <div class="card h-100 p-4">
-        <img src=${image} class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">${phone_name}</h5>
-            <p class="card-text">${slug}</p>
+            <img src=${image} class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">${phone_name}</h5>
+                <p class="card-text">${slug}</p>
+                <button onclick="loadPhoneDetail('${slug}')" href="#" class="btn btn-primary">Show Details</button>
             </div>
-      </div>
+        </div>
         `;
         phonesContainer.appendChild(phonesDiv);
     });
@@ -52,11 +53,18 @@ const processSearch = (dataLimit) => {
     loadPhones(searchText, dataLimit);
     // searchField.value = ``;
 }
-
+// handle search button click
 document.getElementById('btn-search').addEventListener('click', () => {
     // start loader
     processSearch(10);
 });
+
+// search input field enter key handler
+document.getElementById('search-field').addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') {
+        processSearch(10);
+    }
+})
 
 const toggleSpinner = isLoading => {
     const loaderSection = document.getElementById('loader');
@@ -71,5 +79,12 @@ const toggleSpinner = isLoading => {
 document.getElementById('btn-show-all').addEventListener('click', () => {
     processSearch();
 });
+
+const loadPhoneDetail = async id => {
+    const url = `https://openapi.programming-hero.com/api/phone/${id}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    console.log(data.data);
+}
 
 // loadPhones();
